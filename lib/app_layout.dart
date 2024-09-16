@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies/view/home_view.dart';
-import 'package:movies/view/screen_four_view.dart';
 import 'package:movies/view/screen_three_view.dart';
-import 'package:movies/view/screen_two_view.dart';
+import 'package:movies/view/search_page_view.dart';
+import 'package:movies/view/watch_liste_page_view.dart';
 
 class AppLayout extends StatefulWidget {
   const AppLayout({super.key});
@@ -22,23 +22,25 @@ class _AppLayoutState extends State<AppLayout> {
 
   static final List<Widget> _pages = <Widget>[
     MyHomePage(),
-    ScreenTwoView(),
+    SearchPageView(),
     ScreenThreeView(),
-    ScreenFourView()
+    WatchlistPageView()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const Icon(Icons.menu),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Bottom Navigation and AppBar"),
-        centerTitle: true,
+        leading: const Icon(Icons.menu, color: Colors.white),
+        backgroundColor: Colors.blue,
+        title: const Text(
+          "Movies",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: const [
-          Icon(Icons.notifications),
+          Icon(Icons.notifications, color: Colors.white),
           SizedBox(width: 20),
-          Icon(Icons.account_circle_outlined),
+          Icon(Icons.account_circle_outlined, color: Colors.white),
           SizedBox(width: 10)
         ],
       ),
@@ -63,9 +65,10 @@ class _AppLayoutState extends State<AppLayout> {
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        backgroundColor: Colors.white, // Set to a visible color
-        selectedItemColor: Colors.blue, // Color for the selected item
-        unselectedItemColor: Colors.grey, // Color for unselected items
+        backgroundColor: Colors.blue, // Set background color here
+        selectedItemColor: Colors.black, // Ensure the selected item color stands out
+        unselectedItemColor: Colors.white, // Color for unselected items
+        type: BottomNavigationBarType.fixed, // Fixed type ensures background color works
       ),
       body: _pages[_selectedIndex],
     );

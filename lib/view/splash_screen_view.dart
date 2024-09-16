@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-
 class SplashScreenView extends StatefulWidget {
   @override
   _SplashScreenViewState createState() => _SplashScreenViewState();

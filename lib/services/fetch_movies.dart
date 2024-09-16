@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:movies/model/fetchMoviesModel.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../res/aap_Urls.dart';
 class FetchMovies {
-  Future<FetchMoviesModel?> fetchMoviesApi(String minDate, String maxDate) async {
-    final String apiUrl = 'https://api.themoviedb.org/3/discover/movie';
+  Future<FetchMoviesModel?> fetchMoviesApi(String minDate, String maxDate ,Endpoint) async {
+    final String apiUrl = Endpoint;
 
     // Query parameters
     Map<String, String> queryParams = {
@@ -18,9 +20,6 @@ class FetchMovies {
       'release_date.lte': maxDate,
     };
 
-    // Bearer token for authorization
-    final String token =
-        'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ODAwZDlmNGJmYjNiODY3YjUxNmQwMTVmY2RhNTUyOCIsIm5iZiI6MTcyNTc5NDE1NS45MDE1NDMsInN1YiI6IjY2ZGM1ZTBhM2M1NThiNWU2YWVlMjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.IHyrU7bIbKhX8OMW6PQ6HHnHVS9bbOGAzj4ldciz00s';
 
     // Build the complete URL with query parameters
     Uri uri = Uri.parse(apiUrl).replace(queryParameters: queryParams);
@@ -30,7 +29,7 @@ class FetchMovies {
       final response = await http.get(
         uri,
         headers: {
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer ${dotenv.env['AUTH_TOKEN_TMDB']}',
           'accept': 'application/json',
         },
       );
