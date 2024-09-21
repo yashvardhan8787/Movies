@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:movies/app_layout.dart';
-import 'package:movies/view_model/DetailPageViewModel.dart';
-import 'package:movies/view_model/movieCastViewModel.dart';
-import 'package:movies/view_model/searchViewModel.dart';
-import 'package:movies/view_model/watchListViewModel.dart';
+import 'package:movies/view/splash_screen_view.dart';
+import 'package:movies/view_model/detail_page_view_model.dart';
+import 'package:movies/view_model/download_video_view_model.dart';
+import 'package:movies/view_model/movie_cast_view_model.dart';
+import 'package:movies/view_model/search_view_model.dart';
+import 'package:movies/view_model/watchlist_view_model.dart';
 import 'package:provider/provider.dart';
 
 
@@ -22,6 +24,7 @@ Future<void> main() async {
             ChangeNotifierProvider(create: (_) => WatchlistViewModel()),
             ChangeNotifierProvider(create: (_) => DetailPageViewModel()),
             ChangeNotifierProvider(create: (_) => MovieCastViewModel()),
+            ChangeNotifierProvider(create: (_) => Downloadvideoveiwmodel()),
 
           ],
      child: const MyApp()
@@ -41,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AppLayout(),
+      home: SplashScreenView(),
     );
   }
 }

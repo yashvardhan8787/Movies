@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies/model/fetchMoviesModel.dart';
+import 'package:movies/components/listview_shimmer.dart';
+import 'package:movies/model/fetch_movies_model.dart';
 import '../services/fetch_movies.dart';
 import '../view/detail_page_view.dart';
 
@@ -23,6 +24,7 @@ class _MovieSectionState extends State<MovieSection> {
     moviesData = FetchMovies().fetchMoviesApi("2023-01-01", "2023-01-31", widget.sectionEndpoint);
   }
 
+
   @override
   Widget build(BuildContext context) {
     // Fetch screen size using MediaQuery
@@ -42,16 +44,17 @@ class _MovieSectionState extends State<MovieSection> {
           future: moviesData,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(), // Loading indicator
-              );
+              return const  SizedBox(
+                  height: 200, // Set the height of the horizontal list
+                  child: ListviewShimmer());
             } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}'); // Handle error
+              return const  SizedBox(
+                  height: 200, // Set the height of the horizontal list
+                  child: ListviewShimmer()); // Handle error
             } else if (!snapshot.hasData || snapshot.data!.results == null || snapshot.data!.results!.isEmpty) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 12.0), // Padding for better readability
-                child: Text('No movies available'),
-              );
+              return const  SizedBox(
+                  height: 200, // Set the height of the horizontal list
+                  child: ListviewShimmer());
             }
 
             return SizedBox(

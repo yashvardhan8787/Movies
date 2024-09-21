@@ -22,7 +22,7 @@ class RoundButtons extends StatelessWidget {
       onTap: loading ? null : onPress, // Disable button press when loading
       child: Container(
         height: 40,
-        width: MediaQuery.of(context).size.width * 0.49,
+        width: MediaQuery.of(context).size.width * 0.48,
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(10),

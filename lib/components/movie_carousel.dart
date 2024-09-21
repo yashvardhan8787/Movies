@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:movies/res/aap_Urls.dart';
-import '../model/fetchMoviesModel.dart';
+import 'package:shimmer/shimmer.dart';
+import '../model/fetch_movies_model.dart';
 import '../services/fetch_movies.dart';
 import "package:flutter/material.dart";
 import 'movie_carousel_item.dart';
@@ -31,15 +33,47 @@ class _MovieCarouselState extends State<MovieCarousel> {
         future: moviesData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.white70,
+            child: Container(
+              height: 400,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                )
+            ),);
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error fetching movies'));
+            return Shimmer.fromColors(
+              baseColor: Colors.grey[300]!,
+              highlightColor: Colors.white70,
+              child: Container(
+                  height: 400,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  )
+                  ,child: const Text("Something Went Wrong!"),
+              ),);
           } else if (!snapshot.hasData || snapshot.data == null || snapshot.data!.results!.isEmpty) {
-            return const Center(child: Text('No movies available'));
+            return   SizedBox(
+              width:MediaQuery.of(context).size.width * 1,
+              child: Center(
+                child: Container(
+                  height: 400,
+                  width:MediaQuery.of(context).size.width * 0.96,
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(10),
+                  )
+                  ,child: const Center(child: Text("No movies to display",style: TextStyle(color: Colors.black),)),
+                ),
+              ),
+            );
           } else {
             // Data fetched successfully, display the carousel
             return SizedBox(
-              height:300,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: CarouselSlider.builder(
                 itemCount: snapshot.data!.results!.length,
                 itemBuilder: (context, index, realIndex) {
@@ -47,12 +81,12 @@ class _MovieCarouselState extends State<MovieCarousel> {
                   return MovieCarouselItem(movie: movie);
                 },
                 options: CarouselOptions(
-                  height: 400,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   enlargeCenterPage: true,
                   autoPlay: true,
                   autoPlayInterval: const Duration(seconds: 3),
                   viewportFraction: 0.8,
-                  aspectRatio: 16/9,
+                  aspectRatio: 5/4,
                   initialPage: 0,
                 ),
               ),

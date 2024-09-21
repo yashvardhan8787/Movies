@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:movies/components/toast_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:movies/model/searchResultModel.dart'; // renamed class as SearchResults
-import 'package:movies/model/fetchMoviesModel.dart'; // uses class Results
+import 'package:movies/model/fetch_movies_model.dart'; // uses class Results
 
 class WatchlistViewModel extends ChangeNotifier {
   List<dynamic> _watchlist = []; // dynamic to handle both Results and SearchResults types
@@ -33,16 +34,18 @@ class WatchlistViewModel extends ChangeNotifier {
   }
 
   // Add a movie to the watchlist
-  Future<void> addMovieToWatchlist(dynamic movie) async {
+  Future<void> addMovieToWatchlist(dynamic movie , context) async {
     _watchlist.add(movie);
     await _saveWatchlist();
+    ToastMessage.flushBarMessage("${movie!.title} is added to watchList ", context);
     notifyListeners();
   }
 
   // Remove a movie from the watchlist
-  Future<void> removeMovieFromWatchlist(dynamic movie) async {
+  Future<void> removeMovieFromWatchlist(dynamic movie , context) async {
     _watchlist.removeWhere((item) => item.id == movie.id);
     await _saveWatchlist();
+    ToastMessage.flushBarMessage("${movie!.title} is removed from  watchList ", context);
     notifyListeners();
   }
 

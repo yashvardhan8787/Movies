@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies/view/home_view.dart';
-import 'package:movies/view/screen_three_view.dart';
+import 'package:movies/view/download_page_view.dart';
 import 'package:movies/view/search_page_view.dart';
-import 'package:movies/view/watch_liste_page_view.dart';
+import 'package:movies/view/watch_list_page_view.dart';
 
 class AppLayout extends StatefulWidget {
   const AppLayout({super.key});
@@ -23,7 +23,7 @@ class _AppLayoutState extends State<AppLayout> {
   static final List<Widget> _pages = <Widget>[
     MyHomePage(),
     SearchPageView(),
-    ScreenThreeView(),
+    DownloadPageView(),
     WatchlistPageView()
   ];
 
@@ -66,9 +66,11 @@ class _AppLayoutState extends State<AppLayout> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         backgroundColor: Colors.blue, // Set background color here
-        selectedItemColor: Colors.black, // Ensure the selected item color stands out
+        selectedItemColor:Colors.black, // Ensure the selected item color stands out
         unselectedItemColor: Colors.white, // Color for unselected items
         type: BottomNavigationBarType.fixed, // Fixed type ensures background color works
+        showSelectedLabels: true,
+        showUnselectedLabels: false,
       ),
       body: _pages[_selectedIndex],
     );

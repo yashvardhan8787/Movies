@@ -1,61 +1,99 @@
 import 'package:flutter/material.dart';
-import 'package:movies/services/fecth_movie_trailer_videos.dart';
+import 'package:provider/provider.dart';
+import 'package:movies/components/movie_cast.dart';
+import 'package:movies/components/movie_section.dart';
+import 'package:movies/view_model/download_video_view_model.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../view_model/trailer_view_model.dart';
 
-class WatchtrailerPageView extends StatefulWidget {
+class WatchtrailerPageView extends StatelessWidget {
   final dynamic movieData;
   const WatchtrailerPageView({super.key, required this.movieData});
 
   @override
-  State<WatchtrailerPageView> createState() => _WatchtrailerPageViewState();
-}
-
-class _WatchtrailerPageViewState extends State<WatchtrailerPageView> {
-  YoutubePlayerController? _controller;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    getVideoUrl(widget.movieData.id.toString());
-  }
-
-  Future<void> getVideoUrl(String id) async {
-    final FetchMovieTrailerVideos trailerVideos = FetchMovieTrailerVideos();
-    try {
-      final dynamic videos = await trailerVideos.fetchVideosApi(id);
-      print('print for debug');
-      print(videos);
-      final videoKey = videos.results.isNotEmpty ? videos.results[0].key : null;
-      if (videoKey != null) {
-        final videoId = YoutubePlayer.convertUrlToId('https://www.youtube.com/watch?v=$videoKey');
-        setState(() {
-          _controller = YoutubePlayerController(
-            initialVideoId: videoId!,
-            flags: const YoutubePlayerFlags(autoPlay: false),
-          );
-          isLoading = false;
-        });
-      }
-    } catch (error) {
-      print(error);
-      setState(() {
-        isLoading = false; // Ensure loading is updated even if an error occurs
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Watch Trailer"),
+    return ChangeNotifierProvider(
+      create: (_) => TrailerViewModel()..fetchTrailer(movieData.id.toString(), context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(movieData.title),
+        ),
+        body: SingleChildScrollView(
+          child: Consumer<TrailerViewModel>(
+            builder: (context, trailerViewModel, child) {
+              if (trailerViewModel.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (trailerViewModel.errorMessage != null) {
+                return Center(child: Text(trailerViewModel.errorMessage!));
+              }
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (trailerViewModel.controller != null)
+                    YoutubePlayer(controller: trailerViewModel.controller!),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      movieData.title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      "Overview: " + movieData.overview,
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  Consumer<Downloadvideoveiwmodel>(
+                    builder: (BuildContext context, Downloadvideoveiwmodel value, Widget? child) {
+                      return InkWell(
+                        onTap: () {
+                          if (value.status == 'Download') {
+                            value.downloadVideo(trailerViewModel.videoUrl , context);
+                          }
+                        },
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 1.0 ,
+                          child: Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.95,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  value.status,
+                                  style: const TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  MovieCast(movieData: movieData),
+                  MovieSection(
+                    sectionName: "Similar Movies",
+                    sectionEndpoint:
+                    "https://api.themoviedb.org/3/movie/${movieData.id}/similar",
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
       ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : _controller != null
-          ? YoutubePlayer(controller: _controller!)
-          : const Center(child: Text("No trailer available")),
     );
   }
 }

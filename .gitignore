@@ -1,4 +1,5 @@
 # Miscellaneous
+.env
 *.class
 *.log
 *.pyc
@@ -7,7 +8,7 @@
 .atom/
 .buildlog/
 .history
-.svn/
+.svn/WWW
 migrate_working_dir/
 
 # IntelliJ related

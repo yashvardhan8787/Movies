@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movies/components/movie_carousel.dart';
 import 'package:movies/components/movie_section.dart';
 import 'package:movies/res/aap_Urls.dart';
-import 'package:movies/model/fetchMoviesModel.dart'; // Assuming your model is here
+import 'package:movies/model/fetch_movies_model.dart'; // Assuming your model is here
 
 
 
@@ -24,10 +25,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         body:SingleChildScrollView(
           child: Column(
-
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 10,),
-              SizedBox(height:300,child: MovieCarousel()),
+              const SizedBox(height: 8,),
+              SizedBox(height:MediaQuery.of(context).size.height * 0.5,
+                  child: MovieCarousel()),
               MovieSection(sectionName: "Coming Soon",sectionEndpoint: AppUrls.upcomingMovieUrl,),
               MovieSection(sectionName: "Playing Now",sectionEndpoint: AppUrls.now_playingMovieUrl,),
               MovieSection(sectionName: "Popular Movies",sectionEndpoint: AppUrls.popularMovieUrl,),

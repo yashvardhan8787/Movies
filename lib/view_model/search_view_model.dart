@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movies/components/toast_message.dart';
 import 'package:movies/model/searchResultModel.dart';
 import '../services/search_api.dart';
 
@@ -10,7 +11,7 @@ class SearchViewModel extends ChangeNotifier {
   List<searchResults> get movies => _movies; // Return List<Results> instead of dynamic
   bool get isLoading => _isLoading;
 
-  void searchMovies(String query) async {
+  void searchMovies(String query , context) async {
     if (query.isEmpty) {
       _movies = [];
       notifyListeners();
@@ -29,7 +30,7 @@ class SearchViewModel extends ChangeNotifier {
       }
     } catch (error) {
       _movies = [];
-      print(error);
+      ToastMessage.flushBarMessage(error.toString(), context);
     }
 
     _isLoading = false;

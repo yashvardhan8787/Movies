@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:movies/model/searchResultModel.dart';
-import 'package:movies/view_model/searchViewModel.dart';
-import 'package:movies/view_model/watchListViewModel.dart';
+import 'package:movies/view_model/search_view_model.dart';
+import 'package:movies/view_model/watchlist_view_model.dart';
 import 'package:provider/provider.dart';
-
+import 'package:shimmer/shimmer.dart';
 import 'detail_page_view.dart';
 
 class SearchPageView extends StatefulWidget {
@@ -21,7 +21,7 @@ class _SearchPageViewState extends State<SearchPageView> {
   void _onSearchChanged(String query, SearchViewModel viewModel) {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      viewModel.searchMovies(query);
+      viewModel.searchMovies(query , context);
     });
   }
 
@@ -55,11 +55,32 @@ class _SearchPageViewState extends State<SearchPageView> {
                 ),
               ),
               if (searchViewModel.isLoading)
-                const Center(child: CircularProgressIndicator()),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 16.0),
+                          child: Container(
+                            height: 80,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               if (!searchViewModel.isLoading &&
                   searchViewModel.movies.isEmpty)
                 const Center(child: Text('No results found')),
-              if (searchViewModel.movies.isNotEmpty)
+              if (!searchViewModel.isLoading && searchViewModel.movies.isNotEmpty)
                 Expanded(
                   child: ListView.builder(
                     itemCount: searchViewModel.movies.length,
@@ -91,9 +112,9 @@ class _SearchPageViewState extends State<SearchPageView> {
                             ),
                             onPressed: () {
                               if (isInWatchlist) {
-                                watchlistViewModel.removeMovieFromWatchlist(movie);
+                                watchlistViewModel.removeMovieFromWatchlist(movie, context);
                               } else {
-                                watchlistViewModel.addMovieToWatchlist(movie);
+                                watchlistViewModel.addMovieToWatchlist(movie,context);
                               }
                             },
                           ),

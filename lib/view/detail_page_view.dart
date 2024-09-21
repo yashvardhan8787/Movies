@@ -3,8 +3,8 @@ import 'package:movies/components/movie_section.dart';
 import 'package:movies/components/round_buttons.dart';
 import 'package:movies/res/aap_Urls.dart';
 import 'package:movies/view/watchTrailer_page_view.dart';
-import 'package:movies/view_model/DetailPageViewModel.dart';
-import 'package:movies/view_model/watchListViewModel.dart';
+import 'package:movies/view_model/detail_page_view_model.dart';
+import 'package:movies/view_model/watchlist_view_model.dart';
 import 'package:provider/provider.dart';
 
 class DetailPageView extends StatelessWidget {
@@ -14,7 +14,7 @@ class DetailPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DetailPageViewModel()..getMovieDetails(movieData.id.toString()),
+      create: (_) => DetailPageViewModel()..getMovieDetails(movieData.id.toString(),context),
       child: Scaffold(
         appBar: AppBar(
           leading: const Icon(Icons.menu, color: Colors.white),
@@ -69,9 +69,9 @@ class DetailPageView extends StatelessWidget {
                                 padding: const EdgeInsets.all(2.0),
                                 child: RoundButtons(
                                   color: Colors.red,
-                                  title: "Remove From WatchList",
+                                  title: "Remove WatchList",
                                   onPress: () {
-                                    value.removeMovieFromWatchlist(movieData);
+                                    value.removeMovieFromWatchlist(movieData , context);
                                   },
                                   icon: Icons.favorite_outline_outlined,
                                 ),
@@ -83,7 +83,7 @@ class DetailPageView extends StatelessWidget {
                                 color: Colors.lightBlue,
                                 title: "Add To WatchList",
                                 onPress: () {
-                                  value.addMovieToWatchlist(movieData);
+                                  value.addMovieToWatchlist(movieData , context);
                                 },
                                 icon: Icons.favorite,
                               ),
@@ -115,6 +115,7 @@ class DetailPageView extends StatelessWidget {
                         ),
                       ),
                     ),
+                  if (detailViewModel.details != null)
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(

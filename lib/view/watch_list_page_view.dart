@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movies/model/searchResultModel.dart'; // Import your Results model
 import 'package:movies/view/detail_page_view.dart';
-import 'package:movies/view_model/watchListViewModel.dart';
+import 'package:movies/view_model/watchlist_view_model.dart';
 import 'package:provider/provider.dart';
 
 class WatchlistPageView extends StatelessWidget {
@@ -35,7 +34,7 @@ class WatchlistPageView extends StatelessWidget {
                   trailing: IconButton(
                     icon: const Icon(Icons.remove_circle_outline),
                     onPressed: () {
-                      viewModel.removeMovieFromWatchlist(movie);
+                      viewModel.removeMovieFromWatchlist(movie,context);
                     },
                   ),
                 ),

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:movies/model/fetchMoviesModel.dart';
+import 'package:movies/model/fetch_movies_model.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../res/aap_Urls.dart';
@@ -32,7 +32,7 @@ class FetchMovies {
           'Authorization': 'Bearer ${dotenv.env['AUTH_TOKEN_TMDB']}',
           'accept': 'application/json',
         },
-      );
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode == 200) {
         // Parse the JSON response

@@ -9,8 +9,8 @@ class SearchApi {
     final apiKey = dotenv.env['TMDB_API_KEY'];
     final url = Uri.parse(
         'https://api.themoviedb.org/3/search/movie?api_key=$apiKey&query=$query&language=en-US&page=1&include_adult=false');
-
-    final response = await http.get(url);
+    print(url);
+    final response = await http.get(url).timeout(const Duration(seconds: 70));
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);

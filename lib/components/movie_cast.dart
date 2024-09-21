@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movies/view_model/movieCastViewModel.dart';
+import 'package:movies/view_model/movie_cast_view_model.dart';
 import 'package:provider/provider.dart';
-import '../view_model/watchListViewModel.dart';
+import '../view_model/watchlist_view_model.dart';
  // Import your ViewModel
 
 class MovieCast extends StatefulWidget {
